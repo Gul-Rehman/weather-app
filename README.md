@@ -8,7 +8,7 @@
 > Then paste the following credentials in that file
 	
           	PORT=4000
-          	GOOGLE_CLIENT_ID=403262836012-		3e251hoqm8ltl8srr1ne0cgotq7pohjp.apps.googleusercontent.com
+          	GOOGLE_CLIENT_ID=403262836012-3e251hoqm8ltl8srr1ne0cgotq7pohjp.apps.googleusercontent.com
           	GOOGLE_CLIENT_SECRET=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
           	WEATHER_API_KEY=464d692074f54bd4be3152025240505
 

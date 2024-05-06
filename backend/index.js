@@ -1,5 +1,5 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
+
 const cors = require("cors");
 require("dotenv").config();
 
@@ -9,7 +9,6 @@ const { default: axios } = require("axios");
 const verifyGoogleToken = require("./middlewares/verifyGoogleToken.js");
 
 const app = express();
-app.use(cookieParser());
 
 app.use(express.json());
 app.use(cors());

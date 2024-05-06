@@ -1,6 +1,6 @@
 > There are 2 folders one for backend and one for frontend
 
-> Go to both folders and install packages by running the following command 
+> Go to both folders and install packages by running the following command :
                 	npm install
 
 > Then in backend folder create a file with just  .env extension without any filename
@@ -13,10 +13,10 @@
           	WEATHER_API_KEY=464d692074f54bd4be3152025240505
 
 
-> Then on backend project run the followind command 
+> Then on backend project run the followind command :
 	          node index
 
-> After successfully running the backend , go to frontend folder and run the following command
+> After successfully running the backend , go to frontend folder and run the following command:
 	          npm start
 
 then the project will get started

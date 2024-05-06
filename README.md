@@ -19,5 +19,5 @@
 > After successfully running the backend , go to frontend folder and run the following command:
 	          npm start
 
-then the project will get started
+> Then the project will get started
 

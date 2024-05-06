@@ -1,29 +1,35 @@
-import { Box, Button, Typography } from "@mui/material";
-import axios from "axios";
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { apiUrl, baseUrl } from "../api/paths";
+import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const locationUrl = useLocation();
+  const [error, setError] = useState("");
+  const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
   const backgroundImage =
     "https://img.freepik.com/free-vector/sky-background-video-conferencing_23-2148639325.jpg";
+
   useEffect(() => {
-    const checkAccessToken = async () => {
-      try {
-        const response = await axios.get(
-          `${baseUrl.local}${apiUrl.googleToken}`
-        );
-        if (response.data.access_token) {
-          localStorage.setItem("accessToken", response.data.access_token);
-          navigate("/");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    checkAccessToken();
+    const params = new URLSearchParams(locationUrl.search);
+    const errorMessage = params.get("errorMessage");
+    if (errorMessage) {
+      setError("Login Failed");
+      handleClickOpenErrorSnackbar();
+    }
   }, []);
+  const handleClickOpenErrorSnackbar = () => {
+    setOpenErrorSnackbar(true);
+  };
+
+  const handleCloseErrorSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenErrorSnackbar(false);
+  };
+
   return (
     <Box
       sx={{
@@ -48,6 +54,21 @@ const Login = () => {
       >
         Login with Google
       </Button>
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseErrorSnackbar}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

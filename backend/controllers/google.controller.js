@@ -17,10 +17,10 @@ const authorizationUrl = oauth2Client.generateAuthUrl({
   include_granted_scopes: true,
 });
 
-const getAccessTokenHandler = async (req, res, next) => {
+const getUserDataHandler = async (req, res, next) => {
   try {
-    const accessToken = oauth2Client.credentials.access_token;
-    res.status(200).json({ access_token: accessToken });
+    const data = req.userData;
+    res.status(200).json({ data });
   } catch (err) {
     next(err);
   }
@@ -34,13 +34,33 @@ const googleLoginHandler = async (req, res, next) => {
   }
 };
 
+const auth = () => {
+  try {
+    const accessToken = oauth2Client.credentials.access_token;
+    return accessToken;
+  } catch (err) {
+    next(err);
+  }
+};
 const googleCallBackHandler = async (req, res, next) => {
   try {
-    const { code } = req.query;
+    const { code, error } = req.query;
+    if (error == "access_denied") {
+      return res.redirect("http://localhost:3000/login?errorMessage=1");
+    }
+
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-    console.log("tokens : ", tokens);
-    res.redirect(`http://localhost:3000/`);
+    const oauth2 = google.oauth2({
+      auth: oauth2Client,
+      version: "v2",
+    });
+    const { data } = await oauth2.userinfo.get();
+    if (!data) {
+      return res.redirect("http://localhost:3000/login?errorMessage=1");
+    }
+    const accessToken = auth();
+    res.redirect(`http://localhost:3000?accessToken=${accessToken}`);
   } catch (err) {
     next(err);
   }
@@ -72,5 +92,5 @@ module.exports = {
   googleLoginHandler,
   googleCallBackHandler,
   logout,
-  getAccessTokenHandler,
+  getUserDataHandler,
 };

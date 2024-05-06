@@ -3,13 +3,14 @@ const {
   googleLoginHandler,
   googleCallBackHandler,
   logout,
-  getAccessTokenHandler,
+  getUserDataHandler,
 } = require("../controllers/google.controller");
+const verifyGoogleToken = require("../middlewares/verifyGoogleToken");
 const router = express.Router();
 
 router.get("/google", googleLoginHandler);
 router.get("/google/callback", googleCallBackHandler);
 router.post("/google/logout", logout);
-router.get("/google/token", getAccessTokenHandler);
+router.get("/google/user", verifyGoogleToken, getUserDataHandler);
 
 module.exports = router;

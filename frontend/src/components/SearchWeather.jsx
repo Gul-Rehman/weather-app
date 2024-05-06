@@ -25,7 +25,7 @@ const SearchWeather = ({
     <Box
       sx={{
         backgroundColor: "whitesmoke",
-        width: "600px",
+        width: { xs: "200px", mobilem: "350px", sm: "600px" },
         height: "400px",
         borderRadius: "10px",
         display: "flex",
@@ -54,7 +54,9 @@ const SearchWeather = ({
         src="https://img.icons8.com/color-glass/120/partly-cloudy-day--v1.png"
         alt="partly-cloudy-day--v1"
       />
-      <Typography sx={{ margin: "5px 0px" }}>
+      <Typography
+        sx={{ margin: "5px 0px", fontSize: { xs: "12px", sm: "18px" } }}
+      >
         Please Enter the location and get your weather updates now
       </Typography>
 

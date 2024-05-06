@@ -1,18 +1,52 @@
-import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Snackbar,
+  Typography,
+} from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiUrl, baseUrl } from "../api/paths";
 import SearchWeather from "../components/SearchWeather";
 import WeatherCard from "../components/WeatherCard";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+
 const Home = () => {
+  const { accessToken } = useParams();
   const [result, setResult] = useState("");
   const [location, setLocation] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [user, setUser] = useState("");
   const [error, setError] = useState("");
-  const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
-
   const navigate = useNavigate();
+  const locationUrl = useLocation();
+  const [openErrorSnackbar, setOpenErrorSnackbar] = React.useState(false);
+  useEffect(() => {
+    const params = new URLSearchParams(locationUrl.search);
+    const accessToken = params.get("accessToken");
+    if (!accessToken || undefined) {
+      navigate("/login");
+    }
+    localStorage.setItem("accessToken", accessToken);
+    const getUserData = async () => {
+      try {
+        const user = await axios.get(`${baseUrl.local}${apiUrl.googleUser}`, {
+          headers: {
+            authorization: localStorage.getItem("accessToken"),
+          },
+        });
+        setUser(user.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserData();
+  }, []);
+
   const getWeather = async () => {
     if (location == "") {
       handleClickOpenErrorSnackbar();
@@ -61,6 +95,10 @@ const Home = () => {
           position: "relative",
         }}
       >
+        <></>
+        <Avatar alt="Remy Sharp" src={user.picture} />
+        <Typography>{user.name}</Typography>
+        <Typography>{user.email}</Typography>
         <Typography
           sx={{
             margin: "20px",
@@ -90,7 +128,7 @@ const Home = () => {
         <Button
           sx={{
             position: "absolute",
-            top: { xs: "650px", sm: "20px" },
+            top: "20px",
             right: "20px",
           }}
           variant="contained"
